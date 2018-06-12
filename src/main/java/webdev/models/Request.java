@@ -11,21 +11,24 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Milestone {
+public class Request {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	private String milestone;
+	private String request;
 	private Date created;
+	@JsonIgnore
+	@ManyToOne
+	private User user;
 	@JsonIgnore
 	@ManyToOne
 	private Project project;
 	
 	public String getComment() {
-		return milestone;
+		return request;
 	}
-	public void setComment(String milestone) {
-		this.milestone = milestone;
+	public void setComment(String request) {
+		this.request = request;
 	}
 	public Date getCreated() {
 		return created;
@@ -38,5 +41,23 @@ public class Milestone {
 	}
 	public void setProject(Project project) {
 		this.project = project;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getRequest() {
+		return request;
+	}
+	public void setRequest(String request) {
+		this.request = request;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
 	}
 }

@@ -7,7 +7,6 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Inheritance(strategy=InheritanceType.JOINED)
 public class Project {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -18,31 +17,13 @@ public class Project {
 	@JsonIgnore
 	@ManyToOne
 	private Owner owner;
-	@JsonIgnore
-	@ManyToMany(targetEntity=webdev.models.Contributor.class, mappedBy="acceptedProjects")
-	private List<Contributor> acceptedContributors;
-	@JsonIgnore
-	@ManyToMany(targetEntity=webdev.models.Contributor.class, mappedBy="rejectedProjects")
-	private List<Contributor> rejectedContributors;
-	@JsonIgnore
-	@ManyToMany(targetEntity=webdev.models.Contributor.class, mappedBy="pendingProjects")
-	private List<Contributor> pendingContributors;
-	@JsonIgnore
-	@ManyToMany(targetEntity=webdev.models.Mentor.class, mappedBy="acceptedProjects")
-	private List<Mentor> acceptedMentors;
-	@JsonIgnore
-	@ManyToMany(targetEntity=webdev.models.Mentor.class, mappedBy="rejectedProjects")
-	private List<Mentor> rejectedMentors;
-	@JsonIgnore
-	@ManyToMany(targetEntity=webdev.models.Mentor.class, mappedBy="pendingProjects")
-	private List<Mentor> pendingMentors;
 	private String url;
 	@OneToMany(mappedBy="project")
 	@JsonIgnore
 	private List<Comment> comments;
 	@OneToMany(mappedBy="project")
 	@JsonIgnore
-	private List<Milestone> milestones;
+	private List<Request> requests;
 	public int getId() {
 		return id;
 	}
@@ -67,42 +48,6 @@ public class Project {
 	public void setOwner(Owner owner) {
 		this.owner = owner;
 	}
-	public List<Contributor> getAcceptedContributors() {
-		return acceptedContributors;
-	}
-	public void setAcceptedContributors(List<Contributor> acceptedContributors) {
-		this.acceptedContributors = acceptedContributors;
-	}
-	public List<Contributor> getRejectedContributors() {
-		return rejectedContributors;
-	}
-	public void setRejectedContributors(List<Contributor> rejectedContributors) {
-		this.rejectedContributors = rejectedContributors;
-	}
-	public List<Contributor> getPendingContributors() {
-		return pendingContributors;
-	}
-	public void setPendingContributors(List<Contributor> pendingContributors) {
-		this.pendingContributors = pendingContributors;
-	}
-	public List<Mentor> getAcceptedMentors() {
-		return acceptedMentors;
-	}
-	public void setAcceptedMentors(List<Mentor> acceptedMentors) {
-		this.acceptedMentors = acceptedMentors;
-	}
-	public List<Mentor> getRejectedMentors() {
-		return rejectedMentors;
-	}
-	public void setRejectedMentors(List<Mentor> rejectedMentors) {
-		this.rejectedMentors = rejectedMentors;
-	}
-	public List<Mentor> getPendingMentors() {
-		return pendingMentors;
-	}
-	public void setPendingMentors(List<Mentor> pendingMentors) {
-		this.pendingMentors = pendingMentors;
-	}
 	public String getUrl() {
 		return url;
 	}
@@ -121,10 +66,10 @@ public class Project {
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
-	public List<Milestone> getMilestones() {
-		return milestones;
+	public List<Request> getRequests() {
+		return requests;
 	}
-	public void setMilestones(List<Milestone> milestones) {
-		this.milestones = milestones;
+	public void setRequests(List<Request> requests) {
+		this.requests = requests;
 	}
 }

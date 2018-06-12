@@ -17,9 +17,17 @@ public class User {
 	@JsonIgnore
 	@OneToMany(mappedBy="user")
 	private List<Comment> comments;
-	
+	@JsonIgnore
+	@OneToMany(mappedBy="user")
+	private List<Request> requests;
 	public int getId() {
 		return id;
+	}
+	public List<Request> getRequests() {
+		return requests;
+	}
+	public void setRequests(List<Request> requests) {
+		this.requests = requests;
 	}
 	public void setId(int id) {
 		this.id = id;

@@ -12,11 +12,11 @@ public class Owner extends User{
 	@JsonIgnore
 	private List<Project> projectsPosted;
 
-	public List<Project> getProjetcsPosted() {
+	public List<Project> getProjectsPosted() {
 		return projectsPosted;
 	}
 
-	public void setProjetcsPosted(List<Project> projectsPosted) {
+	public void setProjectsPosted(List<Project> projectsPosted) {
 		this.projectsPosted = projectsPosted;
 	}
 }
