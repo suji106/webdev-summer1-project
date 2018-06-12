@@ -14,29 +14,29 @@ public class Project {
 	private int id;
 	private String title;
 	private String summary;
+	private String languages;
 	@JsonIgnore
 	@ManyToOne
 	private Owner owner;
 	@JsonIgnore
-	@ManyToMany(targetEntity=webdev.models.Contributor.class, mappedBy="acceptedProjetcs")
+	@ManyToMany(targetEntity=webdev.models.Contributor.class, mappedBy="acceptedProjects")
 	private List<Contributor> acceptedContributors;
 	@JsonIgnore
-	@ManyToMany(targetEntity=webdev.models.Contributor.class, mappedBy="rejectedContributors")
+	@ManyToMany(targetEntity=webdev.models.Contributor.class, mappedBy="rejectedProjects")
 	private List<Contributor> rejectedContributors;
 	@JsonIgnore
-	@ManyToMany(targetEntity=webdev.models.Contributor.class, mappedBy="pendingContributors")
+	@ManyToMany(targetEntity=webdev.models.Contributor.class, mappedBy="pendingProjects")
 	private List<Contributor> pendingContributors;
 	@JsonIgnore
-	@ManyToMany(targetEntity=webdev.models.Mentor.class, mappedBy="acceptedMentors")
+	@ManyToMany(targetEntity=webdev.models.Mentor.class, mappedBy="acceptedProjects")
 	private List<Mentor> acceptedMentors;
 	@JsonIgnore
-	@ManyToMany(targetEntity=webdev.models.Mentor.class, mappedBy="rejectedMentors")
+	@ManyToMany(targetEntity=webdev.models.Mentor.class, mappedBy="rejectedProjects")
 	private List<Mentor> rejectedMentors;
 	@JsonIgnore
-	@ManyToMany(targetEntity=webdev.models.Mentor.class, mappedBy="pendingMentors")
+	@ManyToMany(targetEntity=webdev.models.Mentor.class, mappedBy="pendingProjects")
 	private List<Mentor> pendingMentors;
 	private String url;
-	private List<String> languages;
 	@OneToMany(mappedBy="project")
 	@JsonIgnore
 	private List<Comment> comments;
@@ -109,10 +109,10 @@ public class Project {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public List<String> getLanguages() {
+	public String getLanguages() {
 		return languages;
 	}
-	public void setLanguages(List<String> languages) {
+	public void setLanguages(String languages) {
 		this.languages = languages;
 	}
 	public List<Comment> getComments() {

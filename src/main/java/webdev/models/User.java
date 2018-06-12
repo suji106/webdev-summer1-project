@@ -1,5 +1,7 @@
 package webdev.models;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,13 +16,19 @@ public class User {
 	private String email;
 	@JsonIgnore
 	@OneToMany(mappedBy="user")
-	private Comment comments;
+	private List<Comment> comments;
 	
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public List<Comment> getComments() {
+		return comments;
+	}
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
 	}
 	public String getName() {
 		return name;
@@ -34,10 +42,4 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public Comment getComments() {
-		return comments;
-	}
-	public void setComments(Comment comments) {
-		this.comments = comments;
-	}	
 }
