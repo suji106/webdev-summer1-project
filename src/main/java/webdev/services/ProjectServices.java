@@ -26,7 +26,7 @@ public class ProjectServices {
 	@Autowired
 	OwnerRepository ownerRepository;
 	
-	@GetMapping("/api/{projectId}")
+	@GetMapping("/api/project/{projectId}")
 	public Project getProjectById(@PathVariable("projectId") int projectId) {
 		Optional<Project> optionalProject = projectRepository.findById(projectId);
 		if(optionalProject.isPresent()) {
