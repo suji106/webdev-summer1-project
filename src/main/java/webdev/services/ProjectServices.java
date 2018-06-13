@@ -64,8 +64,7 @@ public class ProjectServices {
 	}
 	
 	@PostMapping("/api/{ownerId}/project")
-	public Project addComment(@RequestBody Project project, @PathVariable("ownerId") int ownerId,
-			@PathVariable("userId") int userId) {
+	public Project addComment(@RequestBody Project project, @PathVariable("ownerId") int ownerId) {
 		Optional<Owner> optionalOwner = ownerRepository.findById(ownerId);
 		if(optionalOwner.isPresent()) {
 			project.setOwner(optionalOwner.get());

@@ -14,6 +14,7 @@ public class User {
 	private int id;
 	private String name;
 	private String email;
+	private String userType;
 	@JsonIgnore
 	@OneToMany(mappedBy="user")
 	private List<Comment> comments;
@@ -49,5 +50,11 @@ public class User {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public String getUserType() {
+		return userType;
+	}
+	public void setUserType(String userType) {
+		this.userType = userType;
 	}
 }

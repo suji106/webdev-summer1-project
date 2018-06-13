@@ -1,5 +1,6 @@
 package webdev.models;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ public class Project {
 	private String title;
 	private String summary;
 	private String languages;
+	private Date created;
 	@JsonIgnore
 	@ManyToOne
 	private Owner owner;
@@ -53,6 +55,12 @@ public class Project {
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	public Date getCreated() {
+		return created;
+	}
+	public void setCreated(Date created) {
+		this.created = created;
 	}
 	public String getLanguages() {
 		return languages;
