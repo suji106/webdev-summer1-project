@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import webdev.models.User;
@@ -19,6 +21,8 @@ public class UserServices {
 	@Autowired
 	UserRepository userRepository;
 	
+	private String loginType;
+	
 	@GetMapping("/api/users")
 	public Iterable<User> findAllUsers() {
 		return userRepository.findAll(); 
@@ -30,5 +34,14 @@ public class UserServices {
 		if(optionalUser.isPresent()) {
 			userRepository.deleteById(userId);
 		}
+	}
+	
+	@PostMapping("/api/login")
+	public void setLoginType(@RequestBody String loginType) {
+		this.loginType = loginType;
+	}
+	
+	public String getLoginType() {
+		return this.loginType;
 	}
 }

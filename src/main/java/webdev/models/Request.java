@@ -11,17 +11,22 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-enum RequestStatus {
-	frontendEngineer, backendEngineer, dataScienceEngineer, qualityEngineer
-}
 
 @Entity
 public class Request {
+	public enum RequestStatus {
+		accepted, rejected, pending
+	}
+	public enum UserType {
+		owner, contributor, mentor
+	}
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	private String message;
 	private Date created;
+	@Enumerated
+	private UserType userType;
 	@Enumerated
 	private RequestStatus reqStatus;
 	@JsonIgnore
@@ -42,6 +47,12 @@ public class Request {
 	}
 	public void setCreated(Date created) {
 		this.created = created;
+	}
+	public UserType getUserType() {
+		return userType;
+	}
+	public void setUserType(UserType userType) {
+		this.userType = userType;
 	}
 	public Project getProject() {
 		return project;
