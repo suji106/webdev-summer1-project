@@ -1,7 +1,9 @@
 package webdev.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,6 +27,11 @@ public class ProjectServices {
 	
 	@Autowired
 	OwnerRepository ownerRepository;
+	
+	@GetMapping("/api/projects")
+	public Iterable<Project> getAllProjects() {
+		return projectRepository.findAll();
+	}
 	
 	@GetMapping("/api/project/{projectId}")
 	public Project getProjectById(@PathVariable("projectId") int projectId) {
@@ -71,5 +78,24 @@ public class ProjectServices {
 			return projectRepository.save(project);
 		}
 		return null;
+	}
+	
+	@GetMapping("/api/specialized")
+	public List<Project> getSpecializedUsers(@RequestBody String langs) {
+		List<Project> projects = (List<Project>) getAllProjects();
+		List<Project> specialProjects = new ArrayList<Project>();
+		String[] reqLangs = langs.split(" ", langs.length());
+		for(String reqLang: reqLangs) {
+			for(Project project: projects) {
+				String contLanguages = project.getLanguages();
+				String[] languages = contLanguages.split(" ", contLanguages.length());
+				for(String language: languages) {
+					if(reqLang.toLowerCase().equals(language.toLowerCase())) {
+						specialProjects.add(project);
+					}
+				}
+			}
+		}
+		return specialProjects.stream().distinct().collect(Collectors.toList());
 	}
 }
