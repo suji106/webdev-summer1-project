@@ -1,7 +1,9 @@
 package webdev.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -52,5 +54,24 @@ public class ContributorServices {
 			return contributorRepository.save(contributor);
 		}
 		return null;
+	}
+	
+	@GetMapping("/api/specialized")
+	public List<Contributor> getSpecializedUsers(@RequestBody String langs) {
+		List<Contributor> contributors = (List<Contributor>) findAllContributors();
+		List<Contributor> specialContributors = new ArrayList<Contributor>();
+		String[] reqLangs = langs.split(" ", langs.length());
+		for(String reqLang: reqLangs) {
+			for(Contributor contributor: contributors) {
+				String contLanguages = contributor.getLanguages();
+				String[] languages = contLanguages.split(" ", contLanguages.length());
+				for(String language: languages) {
+					if(reqLang.toLowerCase().equals(language.toLowerCase())) {
+						specialContributors.add(contributor);
+					}
+				}
+			}
+		}
+		return specialContributors.stream().distinct().collect(Collectors.toList());
 	}
 }

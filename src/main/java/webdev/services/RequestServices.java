@@ -105,58 +105,77 @@ public class RequestServices {
 	}
 	
 	@GetMapping("/api/{projectId}/requests/contributors/accepted")
-	public List<User> getAcceptedContributorsForProjects(@PathVariable("projectId") int projectId){
+	public List<Request> getAcceptedContributorRequestsForProjects(@PathVariable("projectId") int projectId){
 		Optional<Project> optionalProject = projectRepository.findById(projectId);
 		if(optionalProject.isPresent()) {
 			Project project = optionalProject.get();
 			List<Request> requests = project.getRequests();
-			List<User> users = new ArrayList<User>();
+			List<Request> newRequests = new ArrayList<Request>();
 			
 			for(Request request: requests) {
 				if(request.getReqStatus().equals(Request.RequestStatus.accepted)) {
 					if(request.getUserType().equals(Request.UserType.contributor))
-						users.add(request.getUser());
+						newRequests.add(request);
 				}
 			}
-			return users;
+			return newRequests;
 		}
 		return null;
 	}
 	
-	@GetMapping("/api/{projectId}/requests/mentors/pending")
-	public List<User> getAcceptedMentorsForProjects(@PathVariable("projectId") int projectId){
+	@GetMapping("/api/{projectId}/requests/contributors/pending")
+	public List<Request> getPendingContributorRequestsForProjects(@PathVariable("projectId") int projectId){
 		Optional<Project> optionalProject = projectRepository.findById(projectId);
 		if(optionalProject.isPresent()) {
 			Project project = optionalProject.get();
 			List<Request> requests = project.getRequests();
-			List<User> users = new ArrayList<User>();
+			List<Request> newRequests = new ArrayList<Request>();
+			
+			for(Request request: requests) {
+				if(request.getReqStatus().equals(Request.RequestStatus.pending)) {
+					if(request.getUserType().equals(Request.UserType.contributor))
+						newRequests.add(request);
+				}
+			}
+			return newRequests;
+		}
+		return null;
+	}
+	
+	@GetMapping("/api/{projectId}/requests/mentors/accepted")
+	public List<Request> getAcceptedMentorRequestsForProjects(@PathVariable("projectId") int projectId){
+		Optional<Project> optionalProject = projectRepository.findById(projectId);
+		if(optionalProject.isPresent()) {
+			Project project = optionalProject.get();
+			List<Request> requests = project.getRequests();
+			List<Request> newRequests = new ArrayList<Request>();
 			
 			for(Request request: requests) {
 				if(request.getReqStatus().equals(Request.RequestStatus.accepted)) {
 					if(request.getUserType().equals(Request.UserType.mentor))
-						users.add(request.getUser());
+						newRequests.add(request);
 				}
 			}
-			return users;
+			return newRequests;
 		}
 		return null;
 	}
 	
 	@GetMapping("/api/{projectId}/requests/mentors/pending")
-	public List<User> getPendingContributorsForProjects(@PathVariable("projectId") int projectId){
+	public List<Request> getPendingMentorRequestsForProjects(@PathVariable("projectId") int projectId){
 		Optional<Project> optionalProject = projectRepository.findById(projectId);
 		if(optionalProject.isPresent()) {
 			Project project = optionalProject.get();
 			List<Request> requests = project.getRequests();
-			List<User> users = new ArrayList<User>();
+			List<Request> newRequests = new ArrayList<Request>();
 			
 			for(Request request: requests) {
 				if(request.getReqStatus().equals(Request.RequestStatus.pending)) {
 					if(request.getUserType().equals(Request.UserType.mentor))
-						users.add(request.getUser());
+						newRequests.add(request);
 				}
 			}
-			return users;
+			return newRequests;
 		}
 		return null;
 	}
