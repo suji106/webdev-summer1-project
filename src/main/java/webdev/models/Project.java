@@ -16,6 +16,7 @@ public class Project {
 	private String summary;
 	private String languages;
 	private Date created;
+	private String token;
 	@JsonIgnore
 	@ManyToOne
 	private Owner owner;
@@ -61,6 +62,12 @@ public class Project {
 	}
 	public void setCreated(Date created) {
 		this.created = created;
+	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
 	}
 	public String getLanguages() {
 		return languages;
