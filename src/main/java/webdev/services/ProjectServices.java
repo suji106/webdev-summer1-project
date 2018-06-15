@@ -80,8 +80,9 @@ public class ProjectServices {
 		return null;
 	}
 	
-	@GetMapping("/api/specialized")
+	@PostMapping("/api/specialized")
 	public List<Project> getSpecializedUsers(@RequestBody String langs) {
+		langs = langs.replaceAll("\"", "");
 		List<Project> projects = (List<Project>) getAllProjects();
 		List<Project> specialProjects = new ArrayList<Project>();
 		String[] reqLangs = langs.split(" ", langs.length());
@@ -90,6 +91,7 @@ public class ProjectServices {
 				String contLanguages = project.getLanguages();
 				String[] languages = contLanguages.split(" ", contLanguages.length());
 				for(String language: languages) {
+					System.out.println(reqLang + " " + language);
 					if(reqLang.toLowerCase().equals(language.toLowerCase())) {
 						specialProjects.add(project);
 					}
