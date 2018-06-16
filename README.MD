@@ -1,5 +1,5 @@
 Web Development CCS 5610 Summer 1, 2018 Project Work
 
-APIs for various functionalities in the project:
+App deployed on heroku and can be found on: https://nucode.herokuapp.com/
 
-/api/admins
+Repository link for the client side code: https://github.com/sandiri-s/webdev-summer1-project-client
