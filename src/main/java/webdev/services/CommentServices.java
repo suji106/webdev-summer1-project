@@ -1,5 +1,8 @@
 package webdev.services;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +45,9 @@ public class CommentServices {
 		Optional<Project> optionalProject = projectRepository.findById(projectId);
 		if(optionalProject.isPresent()) {
 			Project project = optionalProject.get();
-			return project.getComments();
+			List<Comment> comments= project.getComments();
+			comments.sort((o1,o2) -> o1.getCreated().compareTo(o2.getCreated()));
+			return comments;
 		}
 		return null;
 	}
@@ -52,7 +57,9 @@ public class CommentServices {
 		Optional<User> optionalUser = userRepository.findById(userId);
 		if(optionalUser.isPresent()) {
 			User user = optionalUser.get();
-			return user.getComments();
+			List<Comment> comments= user.getComments();
+			comments.sort((o1,o2) -> o1.getCreated().compareTo(o2.getCreated()));
+			return comments;
 		}
 		return null;
 	}
