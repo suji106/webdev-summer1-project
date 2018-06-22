@@ -15,7 +15,6 @@ public class Comment {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	@JsonIgnore
 	@ManyToOne
 	private User user;
 	private String comment;
