@@ -36,7 +36,7 @@ public class CommentServices {
 		return commentRepository.findAll(); 
 	}
 	
-	@GetMapping("/api/{projectId}/comments")
+	@GetMapping("/api/{projectId}/project/comments")
 	public Iterable<Comment> findAllCommentsForProjectId(@PathVariable("projectId") int projectId) {
 		Optional<Project> optionalProject = projectRepository.findById(projectId);
 		if(optionalProject.isPresent()) {
@@ -46,7 +46,7 @@ public class CommentServices {
 		return null;
 	}
 	
-	@GetMapping("/api/{userId}/comments")
+	@GetMapping("/api/{userId}/user/comments")
 	public Iterable<Comment> findAllCommentsForUserId(@PathVariable("userId") int userId) {
 		Optional<User> optionalUser = userRepository.findById(userId);
 		if(optionalUser.isPresent()) {
