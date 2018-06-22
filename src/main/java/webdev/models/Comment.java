@@ -17,6 +17,7 @@ public class Comment {
 	private int id;
 	@ManyToOne
 	private User user;
+	private String userType;
 	private String comment;
 	private Date created;
 	@JsonIgnore
@@ -33,6 +34,12 @@ public class Comment {
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+	public String getUserType() {
+		return userType;
+	}
+	public void setUserType(String userType) {
+		this.userType = userType;
 	}
 	public String getComment() {
 		return comment;
