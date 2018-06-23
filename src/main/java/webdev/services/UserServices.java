@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +38,15 @@ public class UserServices {
 		if(optionalUser.isPresent()) {
 			userRepository.deleteById(currentUser.getId());
 		}
+	}
+	
+	@GetMapping("/api/profile/{username}")
+	public User findUserByUsername(@PathVariable("username") String username) {
+		Optional<User> data = userRepository.findUserByUsername(username);
+		if(data.isPresent()) {
+			return data.get();
+		}
+		return null;
 	}
 	
 	@PostMapping("/api/user/signup")
