@@ -19,7 +19,7 @@ public class Project {
 	private String token;
 	@JsonIgnore
 	@ManyToOne
-	private Owner owner;
+	private User owner;
 	private String url;
 	@OneToMany(mappedBy="project")
 	@JsonIgnore
@@ -45,10 +45,10 @@ public class Project {
 	public void setSummary(String summary) {
 		this.summary = summary;
 	}
-	public Owner getOwner() {
+	public User getOwner() {
 		return owner;
 	}
-	public void setOwner(Owner owner) {
+	public void setOwner(User owner) {
 		this.owner = owner;
 	}
 	public String getUrl() {

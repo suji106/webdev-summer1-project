@@ -1,10 +1,9 @@
 package webdev.services;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -52,9 +51,10 @@ public class CommentServices {
 		return null;
 	}
 	
-	@GetMapping("/api/{userId}/user/comments")
-	public Iterable<Comment> findAllCommentsForUserId(@PathVariable("userId") int userId) {
-		Optional<User> optionalUser = userRepository.findById(userId);
+	@GetMapping("/api/user/comments")
+	public Iterable<Comment> findAllCommentsForUserId(@PathVariable("userId") int userId, HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		if(optionalUser.isPresent()) {
 			User user = optionalUser.get();
 			List<Comment> comments= user.getComments();

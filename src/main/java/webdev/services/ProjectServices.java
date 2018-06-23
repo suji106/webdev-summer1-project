@@ -5,19 +5,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import webdev.models.Owner;
 import webdev.models.Project;
-import webdev.repositories.OwnerRepository;
+import webdev.models.User;
 import webdev.repositories.ProjectRepository;
+import webdev.repositories.UserRepository;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -26,8 +29,8 @@ public class ProjectServices {
 	ProjectRepository projectRepository;
 
 	@Autowired
-	OwnerRepository ownerRepository;
-
+	UserRepository userRepository;
+	
 	@GetMapping("/api/projects")
 	public Iterable<Project> getAllProjects() {
 		return projectRepository.findAll();
@@ -42,14 +45,28 @@ public class ProjectServices {
 		return null;
 	}
 
-	@GetMapping("/api/{ownerId}/projects")
-	public List<Project> getProjectsByOwnerId(@PathVariable("ownerId") int ownerId) {
-		Optional<Owner> optionalOwner = ownerRepository.findById(ownerId);
-		if(optionalOwner.isPresent()) {
-			Owner owner = optionalOwner.get();
-			return owner.getProjectsPosted();
+	@GetMapping("/api/projects/owner")
+	public List<Project> getProjectsByOwnerId(HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
+		if(optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			return user.getProjectsPosted();
 		}
 		return null;
+	}
+	
+	@GetMapping("/api/project/{projectId}/owner")
+	public String projectOwnedByOwner(@PathVariable("projectId") int projectId, HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<Project> optionalProject = projectRepository.findById(projectId);
+		if(optionalProject.isPresent()) {
+			Project project = optionalProject.get();
+			if (currentUser.getId() == project.getOwner().getId()) {
+				return "true";
+			}
+		}
+		return "false";
 	}
 
 	@DeleteMapping("/api/project/{projectId}")
@@ -60,21 +77,23 @@ public class ProjectServices {
 		}
 	}
 
-	@DeleteMapping("/api/{ownerId}/projects")
-	public void deleteAllProjectsWithOwnertId(@PathVariable("ownerId") int ownerId) {
-		Optional<Owner> optionalOwner = ownerRepository.findById(ownerId);
-		Owner owner = optionalOwner.get();
-		List<Project> projects= owner.getProjectsPosted();
-		for(Project project: projects) {
-			deleteProject(project.getId());
+	@PostMapping("/api/project")
+	public Project addProject(@RequestBody Project project, HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
+		if(optionalUser.isPresent()) {
+			project.setOwner(optionalUser.get());
+			return projectRepository.save(project);
 		}
+		return null;
 	}
-
-	@PostMapping("/api/{ownerId}/project")
-	public Project addProject(@RequestBody Project project, @PathVariable("ownerId") int ownerId) {
-		Optional<Owner> optionalOwner = ownerRepository.findById(ownerId);
-		if(optionalOwner.isPresent()) {
-			project.setOwner(optionalOwner.get());
+	
+	@PutMapping("/api/project")
+	public Project updateProject(@RequestBody Project project, HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
+		if(optionalUser.isPresent()) {
+			project.setOwner(optionalUser.get());
 			return projectRepository.save(project);
 		}
 		return null;

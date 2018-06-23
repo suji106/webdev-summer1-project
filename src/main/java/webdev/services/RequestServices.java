@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,9 +48,10 @@ public class RequestServices {
 		return null;
 	}
 	
-	@GetMapping("/api/{userId}/requests")
-	public Iterable<Request> findAllRequestsForUserId(@PathVariable("userId") int userId) {
-		Optional<User> optionalUser = userRepository.findById(userId);
+	@GetMapping("/api/requests/user")
+	public Iterable<Request> findAllRequestsForUserId(HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		if(optionalUser.isPresent()) {
 			User user = optionalUser.get();
 			return user.getRequests();
@@ -64,9 +67,10 @@ public class RequestServices {
 		}
 	}
 	
-	@DeleteMapping("/api/{userId}/requests")
-	public void deleteAllRequestsWithUserId(@PathVariable("userId") int userId) {
-		Optional<User> optionalUser = userRepository.findById(userId);
+	@DeleteMapping("/api/request")
+	public void deleteAllRequestsWithUserId(HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		User user = optionalUser.get();
 		List<Request> requests= user.getRequests();
 		for(Request request: requests) {
@@ -84,24 +88,39 @@ public class RequestServices {
 		}
 	}
 	
-	@PostMapping("/api/{projectId}/{userId}/request")
+	@GetMapping("/api/{projectId}/request")
+	public String getRequestStatus(@PathVariable("projectId") int projectId, HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		int requestId = requestRepository.findIdByUserIdAndProjectId(currentUser, projectRepository.findById(projectId).get(),
+				(String) session.getAttribute("currentUserType"));
+		Optional<Request> optionalRequest = requestRepository.findById(requestId);
+		if (optionalRequest.isPresent()) {
+			Request request = optionalRequest.get();
+			return request.getMessage();	
+		}
+		return "";
+	}
+	
+	@PostMapping("/api/{projectId}/request")
 	public Request addRequest(@RequestBody Request request, @PathVariable("projectId") int projectId,
-			@PathVariable("userId") int userId) {
+			HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
 		Optional<Project> optionalProject = projectRepository.findById(projectId);
-		Optional<User> optionalUser = userRepository.findById(userId);
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		request.setProject(optionalProject.get());
 		request.setUser(optionalUser.get());
 		return requestRepository.save(request);	
 	}
 	
-	@PutMapping("/api/{projectId}/{userId}/request")
+	@PutMapping("/api/{projectId}/request")
 	public Request updateRequest(@RequestBody Request request, @PathVariable("projectId") int projectId,
-			@PathVariable("userId") int userId) {
-		Optional<Request> optionalRequest = requestRepository.findById(request.getId());
-		if(optionalRequest.isPresent()) {
-			requestRepository.save(request);
-		}
-		return null;
+			HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<Project> optionalProject = projectRepository.findById(projectId);
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
+		request.setProject(optionalProject.get());
+		request.setUser(optionalUser.get());
+		return requestRepository.save(request);	
 	}
 	
 	@GetMapping("/api/{projectId}/requests/contributors/accepted")
@@ -114,7 +133,7 @@ public class RequestServices {
 			
 			for(Request request: requests) {
 				if(request.getReqStatus().equals(Request.RequestStatus.accepted)) {
-					if(request.getUserType().equals(Request.UserType.contributor))
+					if(request.getUserType().equals("contributor"))
 						newRequests.add(request);
 				}
 			}
@@ -133,7 +152,7 @@ public class RequestServices {
 			
 			for(Request request: requests) {
 				if(request.getReqStatus().equals(Request.RequestStatus.pending)) {
-					if(request.getUserType().equals(Request.UserType.contributor))
+					if(request.getUserType().equals("contributor"))
 						newRequests.add(request);
 				}
 			}
@@ -152,7 +171,7 @@ public class RequestServices {
 			
 			for(Request request: requests) {
 				if(request.getReqStatus().equals(Request.RequestStatus.accepted)) {
-					if(request.getUserType().equals(Request.UserType.mentor))
+					if(request.getUserType().equals("mentor"))
 						newRequests.add(request);
 				}
 			}
@@ -171,7 +190,7 @@ public class RequestServices {
 			
 			for(Request request: requests) {
 				if(request.getReqStatus().equals(Request.RequestStatus.pending)) {
-					if(request.getUserType().equals(Request.UserType.mentor))
+					if(request.getUserType().equals("mentor"))
 						newRequests.add(request);
 				}
 			}
@@ -180,29 +199,10 @@ public class RequestServices {
 		return null;
 	}
 	
-	@GetMapping("/api/{projectId}/requests/mentor/pending")
-	public List<User> getPendingMentorsForProjects(@PathVariable("projectId") int projectId){
-		Optional<Project> optionalProject = projectRepository.findById(projectId);
-		if(optionalProject.isPresent()) {
-			Project project = optionalProject.get();
-			List<Request> requests = project.getRequests();
-			List<User> users = new ArrayList<User>();
-			
-			for(Request request: requests) {
-				if(request.getReqStatus().equals(Request.RequestStatus.pending)) {
-					if(request.getUserType().equals(Request.UserType.contributor))
-						users.add(request.getUser());
-				}
-			}
-			return users;
-		}
-		return null;
-	}
-	
-	
-	@GetMapping("/api/{userId}/requests/accepted")
-	public List<Project> getAcceptedProjectsForUser(@PathVariable("userId") int userId){
-		Optional<User> optionalUser = userRepository.findById(userId);
+	@GetMapping("/api/requests/accepted")
+	public List<Project> getAcceptedProjectsForUser(HttpSession session){
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		if(optionalUser.isPresent()) {
 			User user = optionalUser.get();
 			List<Request> requests = user.getRequests();
@@ -218,9 +218,10 @@ public class RequestServices {
 		return null;
 	}
 	
-	@GetMapping("/api/{userId}/requests/rejected")
-	public List<Project> getRejectedProjectsForUser(@PathVariable("userId") int userId){
-		Optional<User> optionalUser = userRepository.findById(userId);
+	@GetMapping("/api/requests/rejected")
+	public List<Project> getRejectedProjectsForUser(HttpSession session){
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		if(optionalUser.isPresent()) {
 			User user = optionalUser.get();
 			List<Request> requests = user.getRequests();
@@ -236,9 +237,10 @@ public class RequestServices {
 		return null;
 	}
 	
-	@GetMapping("/api/{userId}/requests/pending")
-	public List<Project> getPendingProjectsForUser(@PathVariable("userId") int userId){
-		Optional<User> optionalUser = userRepository.findById(userId);
+	@GetMapping("/api/requests/pending")
+	public List<Project> getPendingProjectsForUser(HttpSession session){
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		if(optionalUser.isPresent()) {
 			User user = optionalUser.get();
 			List<Request> requests = user.getRequests();

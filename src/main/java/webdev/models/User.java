@@ -15,12 +15,33 @@ public class User {
 	private String name;
 	private String email;
 	private String githubId;
+	private String imageUrl;
+	private String socialType;
+	
 	@JsonIgnore
 	@OneToMany(mappedBy="user")
 	private List<Comment> comments;
 	@JsonIgnore
 	@OneToMany(mappedBy="user")
 	private List<Request> requests;
+	private String organization;
+	@OneToMany(mappedBy="owner")
+	@JsonIgnore
+	private List<Project> projectsPosted;
+
+	public List<Project> getProjectsPosted() {
+		return projectsPosted;
+	}
+
+	public void setProjectsPosted(List<Project> projectsPosted) {
+		this.projectsPosted = projectsPosted;
+	}
+	public String getOrganization() {
+		return organization;
+	}
+	public void setOrganization(String organization) {
+		this.organization = organization;
+	}
 	public int getId() {
 		return id;
 	}
@@ -29,6 +50,18 @@ public class User {
 	}
 	public void setRequests(List<Request> requests) {
 		this.requests = requests;
+	}
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+	public String getSocialType() {
+		return socialType;
+	}
+	public void setSocialType(String socialType) {
+		this.socialType = socialType;
 	}
 	public void setId(int id) {
 		this.id = id;
