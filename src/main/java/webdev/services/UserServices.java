@@ -25,12 +25,12 @@ import webdev.repositories.UserRepository;
 public class UserServices {
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@GetMapping("/api/users")
 	public Iterable<User> findAllUsers() {
 		return userRepository.findAll(); 
 	}
-	
+
 	@DeleteMapping("/api/user")
 	public void deleteUser(HttpSession session) {
 		User currentUser = (User) session.getAttribute("currentUser");
@@ -39,16 +39,16 @@ public class UserServices {
 			userRepository.deleteById(currentUser.getId());
 		}
 	}
-	
-	@GetMapping("/api/profile/{username}")
-	public User findUserByUsername(@PathVariable("username") String username) {
-		Optional<User> data = userRepository.findUserByUsername(username);
+
+	@GetMapping("/api/profile/{email}")
+	public User findUserByUsername(@PathVariable("email") String email) {
+		Optional<User> data = userRepository.findUserByUsername(email);
 		if(data.isPresent()) {
 			return data.get();
 		}
 		return null;
 	}
-	
+
 	@PostMapping("/api/user/signup")
 	public User signUpUser(@RequestBody User user, HttpSession session) throws JSONException {
 		Optional<User> optionalUser = userRepository.findById(user.getId());
@@ -57,7 +57,7 @@ public class UserServices {
 		}
 		return null;
 	}
-	
+
 	@PostMapping("/api/user/normalLogin")
 	public User normalLoginUser(@RequestBody String body, HttpSession session) throws JSONException {
 		JSONObject bodyObject = new JSONObject(body);
@@ -65,32 +65,35 @@ public class UserServices {
 		session.setAttribute("currentUser", userType);
 		String email = (String) bodyObject.get("email");
 		String password = (String) bodyObject.get("password");
-		int id = userRepository.findUserIdByEmail(email);
-		Optional<User> optionalUser = userRepository.findById(id);
-		if(optionalUser.isPresent() && (optionalUser.get().getPassword().equals(password))) {
-			User user = optionalUser.get();
-			session.setAttribute("currentUser", user);
-			return user;
+		Optional<Integer> optionalId = userRepository.findUserIdByEmail(email);
+
+		if(optionalId.isPresent()) {
+			Optional<User> optionalUser = userRepository.findById(optionalId.get());
+			if (optionalUser.get().getPassword().equals(password)) {
+				User user = optionalUser.get();
+				session.setAttribute("currentUser", user);
+				return user;
+			}
 		}
 		return null;
 	}
-	
+
 	@PostMapping("/api/user/socialLogin")
 	public User socialLoginUser(@RequestBody String body, HttpSession session) throws JSONException {
 		JSONObject bodyObject = new JSONObject(body);
 		String userType = (String) bodyObject.get("userType");
 		session.setAttribute("currentUser", userType);
 		String email = (String) bodyObject.get("email");
-		int id = userRepository.findUserIdByEmail(email);
-		Optional<User> optionalUser = userRepository.findById(id);
-		if(optionalUser.isPresent()) {
+		Optional<Integer> optionalId = userRepository.findUserIdByEmail(email);
+		if(optionalId.isPresent()) {
+			Optional<User> optionalUser = userRepository.findById(optionalId.get());
 			User user = optionalUser.get();
 			session.setAttribute("currentUser", user);
 			return user;
 		}
 		return null;
 	}
-	
+
 	@PutMapping("/api/user/update")
 	public User updateUser(@RequestBody User currentUser, HttpSession session) throws JSONException {
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());

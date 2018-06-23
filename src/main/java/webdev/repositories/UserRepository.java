@@ -11,10 +11,10 @@ import webdev.models.User;
 public interface UserRepository
 	extends CrudRepository<User, Integer> {
 	@Query("SELECT id FROM User u WHERE u.email=:email")
-	int findUserIdByEmail(
+	Optional<Integer> findUserIdByEmail(
 		@Param("email") String email);
 	
-	@Query("SELECT u FROM User u WHERE u.username=:username")
+	@Query("SELECT u FROM User u WHERE u.email=:email")
 	Optional<User> findUserByUsername(
-		@Param("username") String username);
+		@Param("email") String email);
 }
