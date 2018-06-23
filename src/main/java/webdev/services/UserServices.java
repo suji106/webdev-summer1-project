@@ -58,8 +58,25 @@ public class UserServices {
 		return null;
 	}
 	
-	@PostMapping("/api/user/login")
-	public User loginUser(@RequestBody String body, HttpSession session) throws JSONException {
+	@PostMapping("/api/user/normalLogin")
+	public User normalLoginUser(@RequestBody String body, HttpSession session) throws JSONException {
+		JSONObject bodyObject = new JSONObject(body);
+		String userType = (String) bodyObject.get("userType");
+		session.setAttribute("currentUser", userType);
+		String email = (String) bodyObject.get("email");
+		String password = (String) bodyObject.get("password");
+		int id = userRepository.findUserIdByEmail(email);
+		Optional<User> optionalUser = userRepository.findById(id);
+		if(optionalUser.isPresent() && (optionalUser.get().getPassword().equals(password))) {
+			User user = optionalUser.get();
+			session.setAttribute("currentUser", user);
+			return user;
+		}
+		return null;
+	}
+	
+	@PostMapping("/api/user/socialLogin")
+	public User socialLoginUser(@RequestBody String body, HttpSession session) throws JSONException {
 		JSONObject bodyObject = new JSONObject(body);
 		String userType = (String) bodyObject.get("userType");
 		session.setAttribute("currentUser", userType);
