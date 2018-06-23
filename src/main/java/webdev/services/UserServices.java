@@ -84,6 +84,7 @@ public class UserServices {
 		String userType = (String) bodyObject.get("userType");
 		session.setAttribute("currentUser", userType);
 		String email = (String) bodyObject.get("email");
+		String name = (String) bodyObject.get("name");
 		Optional<Integer> optionalId = userRepository.findUserIdByEmail(email);
 		if(optionalId.isPresent()) {
 			Optional<User> optionalUser = userRepository.findById(optionalId.get());
@@ -91,7 +92,14 @@ public class UserServices {
 			session.setAttribute("currentUser", user);
 			return user;
 		}
-		return null;
+		else {
+			User newUser = new User();
+			newUser.setEmail(email);
+			newUser.setName(name);
+			userRepository.save(newUser);
+			session.setAttribute("currentUser", newUser);
+			return newUser;
+		}
 	}
 
 	@PutMapping("/api/user/update")
