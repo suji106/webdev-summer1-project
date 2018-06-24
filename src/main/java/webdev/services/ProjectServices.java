@@ -7,7 +7,12 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,16 +62,21 @@ public class ProjectServices {
 	}
 	
 	@GetMapping("/api/project/{projectId}/owner")
-	public String projectOwnedByOwner(@PathVariable("projectId") int projectId, HttpSession session) {
+	public ResponseEntity<String> projectOwnedByOwner(@PathVariable("projectId") int projectId, HttpSession session) {
 		User currentUser = (User) session.getAttribute("currentUser");
 		Optional<Project> optionalProject = projectRepository.findById(projectId);
+		JSONObject bodyObject = new JSONObject("{}");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 		if(optionalProject.isPresent()) {
 			Project project = optionalProject.get();
 			if (currentUser.getId() == project.getOwner().getId()) {
-				return "true";
+				bodyObject.put("isOwner", "true");
+				return new ResponseEntity<String>(bodyObject.toString(), headers, HttpStatus.ACCEPTED);
 			}
 		}
-		return "false";
+		bodyObject.put("isOwner", "false");
+		return new ResponseEntity<String>(bodyObject.toString(), headers, HttpStatus.ACCEPTED);
 	}
 
 	@DeleteMapping("/api/project/{projectId}")

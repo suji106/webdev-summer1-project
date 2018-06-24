@@ -90,7 +90,6 @@ public class UserServices {
 		String email = (String) bodyObject.get("email");
 		String password = (String) bodyObject.get("password");
 		Optional<Integer> optionalId = userRepository.findUserIdByEmail(email);
-
 		if(optionalId.isPresent()) {
 			Optional<User> optionalUser = userRepository.findById(optionalId.get());
 			if (optionalUser.get().getPassword().equals(password)) {

@@ -1,6 +1,7 @@
 package webdev.services;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -109,6 +110,8 @@ public class RequestServices {
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		request.setProject(optionalProject.get());
 		request.setUser(optionalUser.get());
+		request.setCreated(new Date());
+		request.setUserType((String) session.getAttribute("userType"));
 		return requestRepository.save(request);	
 	}
 	
