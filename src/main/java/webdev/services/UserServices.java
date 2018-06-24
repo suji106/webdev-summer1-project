@@ -2,6 +2,7 @@ package webdev.services;
 
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
@@ -19,9 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import webdev.models.User;
 import webdev.repositories.UserRepository;
 
-
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600, allowCredentials="true")
 public class UserServices {
 	@Autowired
 	UserRepository userRepository;
@@ -59,7 +59,7 @@ public class UserServices {
 	}
 
 	@PostMapping("/api/user/normalLogin")
-	public User normalLoginUser(@RequestBody String body, HttpSession session) throws JSONException {
+	public User normalLoginUser(@RequestBody String body, HttpSession session, HttpServletResponse response) throws JSONException {
 		JSONObject bodyObject = new JSONObject(body);
 		String userType = (String) bodyObject.get("userType");
 		session.setAttribute("currentUser", userType);
@@ -72,6 +72,11 @@ public class UserServices {
 			if (optionalUser.get().getPassword().equals(password)) {
 				User user = optionalUser.get();
 				session.setAttribute("currentUser", user);
+				
+			    response.setHeader("Access-Control-Allow-Credentials", "true");
+			    response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+			   
+			    response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
 				return user;
 			}
 		}
