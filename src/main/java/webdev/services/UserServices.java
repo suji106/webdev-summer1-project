@@ -31,6 +31,16 @@ public class UserServices {
 		return userRepository.findAll(); 
 	}
 
+	@GetMapping("/api/user")
+	public User getUser(HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
+		if(optionalUser.isPresent()) {
+			return optionalUser.get();
+		}
+		return null;
+	}
+	
 	@DeleteMapping("/api/user")
 	public void deleteUser(HttpSession session) {
 		User currentUser = (User) session.getAttribute("currentUser");
@@ -95,11 +105,6 @@ public class UserServices {
 			Optional<User> optionalUser = userRepository.findById(optionalId.get());
 			User user = optionalUser.get();
 			session.setAttribute("currentUser", user);
-			System.out.println(session.getAttribute("userType"));
-			System.out.println(session.getAttribute("currentUser"));
-			System.out.println(session.getId());
-			User a = (User) (session.getAttribute("currentUser"));
-			System.out.println(a.getEmail());
 			return user;
 		}
 		else {

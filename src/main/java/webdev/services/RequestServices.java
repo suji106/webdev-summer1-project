@@ -50,9 +50,6 @@ public class RequestServices {
 	
 	@GetMapping("/api/requests/user")
 	public Iterable<Request> findAllRequestsForUserId(HttpSession session) {
-		System.out.println(session.getAttribute("userType"));
-		System.out.println(session.getAttribute("currentUser"));
-		System.out.println(session.getId());
 		User currentUser = (User) session.getAttribute("currentUser");
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		if(optionalUser.isPresent()) {
