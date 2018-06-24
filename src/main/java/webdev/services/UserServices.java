@@ -146,8 +146,7 @@ public class UserServices {
 	
 	@GetMapping("/api/userType")
 	public JSONObject userType(HttpSession session) {
-		JSONObject bodyObject = new JSONObject("");
-		
+		JSONObject bodyObject = new JSONObject("{}");
 		if (session.getAttribute("userType") == null) {
 			bodyObject.put("uerType", "None");
 			return bodyObject;
