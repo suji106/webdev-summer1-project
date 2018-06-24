@@ -129,7 +129,7 @@ public class UserServices {
 	@GetMapping("/api/userType")
 	public String userType(HttpSession session) {
 		if (session.getAttribute("userType") == null) {
-			return "";
+			return "None";
 		}
 		else
 			return (String) session.getAttribute("userType");
