@@ -124,6 +124,7 @@ public class RequestServices {
 		request.setUser(optionalUser.get());
 		request.setCreated(new Date());
 		request.setUserType((String) session.getAttribute("userType"));
+		System.out.println(request.getUserType());
 		return requestRepository.save(request);	
 	}
 
