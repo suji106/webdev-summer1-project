@@ -124,7 +124,7 @@ public class RequestServices {
 		request.setUser(optionalUser.get());
 		request.setCreated(new Date());
 		request.setUserType((String) session.getAttribute("userType"));
-		System.out.println(request.getUserType());
+		request.setReqStatus(Request.RequestStatus.pending);
 		return requestRepository.save(request);	
 	}
 
@@ -139,6 +139,18 @@ public class RequestServices {
 		return requestRepository.save(request);	
 	}
 
+	@PutMapping("/api/request/accepted")
+	public Request updateRequestToAccepted(@RequestBody Request request) {
+		request.setReqStatus(Request.RequestStatus.accepted);
+		return requestRepository.save(request);	
+	}
+	
+	@PutMapping("/api/request/rejected")
+	public Request updateRequestToRejected(@RequestBody Request request) {
+		request.setReqStatus(Request.RequestStatus.rejected);
+		return requestRepository.save(request);	
+	}
+
 	@GetMapping("/api/{projectId}/requests/contributors/accepted")
 	public List<Request> getAcceptedContributorRequestsForProjects(@PathVariable("projectId") int projectId){
 		Optional<Project> optionalProject = projectRepository.findById(projectId);
@@ -146,10 +158,9 @@ public class RequestServices {
 			Project project = optionalProject.get();
 			List<Request> requests = project.getRequests();
 			List<Request> newRequests = new ArrayList<Request>();
-
 			for(Request request: requests) {
 				if(request.getReqStatus().equals(Request.RequestStatus.accepted)) {
-					if(request.getUserType().equals("contributor"))
+					if(request.getUserType().equals("Contributor"))
 						newRequests.add(request);
 				}
 			}
@@ -165,11 +176,14 @@ public class RequestServices {
 			Project project = optionalProject.get();
 			List<Request> requests = project.getRequests();
 			List<Request> newRequests = new ArrayList<Request>();
-
-			for(Request request: requests) {
-				if(request.getReqStatus().equals(Request.RequestStatus.pending)) {
-					if(request.getUserType().equals("contributor"))
-						newRequests.add(request);
+			if (requests != null) {
+				for(Request request: requests) {
+					System.out.println(request.getUserType());
+					System.out.println(request.getReqStatus());
+					if(request.getReqStatus().equals(Request.RequestStatus.pending)) {
+						if(request.getUserType().equals("Contributor"))
+							newRequests.add(request);
+					}
 				}
 			}
 			return newRequests;
@@ -184,10 +198,9 @@ public class RequestServices {
 			Project project = optionalProject.get();
 			List<Request> requests = project.getRequests();
 			List<Request> newRequests = new ArrayList<Request>();
-
 			for(Request request: requests) {
 				if(request.getReqStatus().equals(Request.RequestStatus.accepted)) {
-					if(request.getUserType().equals("mentor"))
+					if(request.getUserType().equals("Mentor"))
 						newRequests.add(request);
 				}
 			}
@@ -203,10 +216,9 @@ public class RequestServices {
 			Project project = optionalProject.get();
 			List<Request> requests = project.getRequests();
 			List<Request> newRequests = new ArrayList<Request>();
-
 			for(Request request: requests) {
 				if(request.getReqStatus().equals(Request.RequestStatus.pending)) {
-					if(request.getUserType().equals("mentor"))
+					if(request.getUserType().equals("Mentor"))
 						newRequests.add(request);
 				}
 			}
@@ -223,7 +235,6 @@ public class RequestServices {
 			User user = optionalUser.get();
 			List<Request> requests = user.getRequests();
 			List<Project> projects = new ArrayList<Project>();
-
 			for(Request request: requests) {
 				if(request.getReqStatus().equals(Request.RequestStatus.accepted)) {
 					projects.add(request.getProject());
@@ -242,7 +253,6 @@ public class RequestServices {
 			User user = optionalUser.get();
 			List<Request> requests = user.getRequests();
 			List<Project> projects = new ArrayList<Project>();
-
 			for(Request request: requests) {
 				if(request.getReqStatus().equals(Request.RequestStatus.rejected)) {
 					projects.add(request.getProject());
@@ -261,7 +271,6 @@ public class RequestServices {
 			User user = optionalUser.get();
 			List<Request> requests = user.getRequests();
 			List<Project> projects = new ArrayList<Project>();
-
 			for(Request request: requests) {
 				if(request.getReqStatus().equals(Request.RequestStatus.pending)) {
 					projects.add(request.getProject());
