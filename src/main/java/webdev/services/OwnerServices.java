@@ -17,7 +17,7 @@ import webdev.repositories.OwnerRepository;
 
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600, allowCredentials="true")
 public class OwnerServices {
 	@Autowired
 	OwnerRepository ownerRepository;

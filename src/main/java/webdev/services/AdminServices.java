@@ -16,7 +16,7 @@ import webdev.models.Admin;
 import webdev.repositories.AdminRepository;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600, allowCredentials="true")
 public class AdminServices {
 	@Autowired
 	AdminRepository adminRepository;

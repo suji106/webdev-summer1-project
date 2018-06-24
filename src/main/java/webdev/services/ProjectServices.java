@@ -23,7 +23,7 @@ import webdev.repositories.ProjectRepository;
 import webdev.repositories.UserRepository;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600, allowCredentials="true")
 public class ProjectServices {
 	@Autowired
 	ProjectRepository projectRepository;
