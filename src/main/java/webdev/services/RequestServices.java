@@ -108,7 +108,7 @@ public class RequestServices {
 		else {
 			Optional<Request> optionalRequest = requestRepository.findById(optionalRequestId.get());
 			Request request = optionalRequest.get();
-			bodyObject.put("status", request.getMessage());
+			bodyObject.put("status", request.getReqStatus());
 			return new ResponseEntity<String>(bodyObject.toString(), headers, HttpStatus.ACCEPTED);
 		}
 	}
