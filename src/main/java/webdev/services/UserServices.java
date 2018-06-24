@@ -135,6 +135,15 @@ public class UserServices {
 		return null;
 	}
 	
+	@PutMapping("/api/user/update/{userId}")
+	public User updateUser(@RequestBody User currentUser, @PathVariable("userId") int userId) {
+		Optional<User> optionalUser = userRepository.findById(userId);
+		if(optionalUser.isPresent()) {
+			return userRepository.save(currentUser);
+		}
+		return null;
+	}
+	
 	@GetMapping("/api/userType")
 	public String userType(HttpSession session) {
 		if (session.getAttribute("userType") == null) {
