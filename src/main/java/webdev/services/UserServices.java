@@ -8,6 +8,10 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -144,16 +148,33 @@ public class UserServices {
 		return null;
 	}
 	
-	@GetMapping("/api/userType")
-	public JSONObject userType(HttpSession session) {
+	@GetMapping("/api/user/logout")
+	public JSONObject logout(HttpSession session) {
 		JSONObject bodyObject = new JSONObject("{}");
 		if (session.getAttribute("userType") == null) {
-			bodyObject.put("uerType", "None");
+			bodyObject.put("userType", "None");
+			System.out.println(bodyObject.toString());
 			return bodyObject;
 		}
 		else {
-			bodyObject.put("uerType", (String) session.getAttribute("userType"));
+			bodyObject.put("userType", (String) session.getAttribute("userType"));
+			System.out.println(bodyObject.toString());
 			return bodyObject;
+		}
+	}
+	
+	@GetMapping("/api/userType")
+	public ResponseEntity<String> userType(HttpSession session) {
+		JSONObject bodyObject = new JSONObject("{}");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		if (session.getAttribute("userType") == null) {
+			bodyObject.put("userType", "None");
+			return new ResponseEntity<String>(bodyObject.toString(), headers, HttpStatus.ACCEPTED);
+		}
+		else {
+			bodyObject.put("userType", (String) session.getAttribute("userType"));
+			return new ResponseEntity<String>(bodyObject.toString(), headers, HttpStatus.ACCEPTED);
 		}
 	}
 }
