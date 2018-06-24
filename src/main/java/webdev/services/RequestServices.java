@@ -7,7 +7,11 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -90,16 +94,20 @@ public class RequestServices {
 	}
 	
 	@GetMapping("/api/{projectId}/request")
-	public String getRequestStatus(@PathVariable("projectId") int projectId, HttpSession session) {
+	public ResponseEntity<String> getRequestStatus(@PathVariable("projectId") int projectId, HttpSession session) {
 		User currentUser = (User) session.getAttribute("currentUser");
 		int requestId = requestRepository.findIdByUserIdAndProjectId(currentUser, projectRepository.findById(projectId).get(),
 				(String) session.getAttribute("currentUserType"));
 		Optional<Request> optionalRequest = requestRepository.findById(requestId);
+		JSONObject bodyObject = new JSONObject("{}");
+		HttpHeaders headers = new HttpHeaders();
 		if (optionalRequest.isPresent()) {
 			Request request = optionalRequest.get();
-			return request.getMessage();	
+			bodyObject.put("status", request.getMessage());
+			return new ResponseEntity<String>(bodyObject.toString(), headers, HttpStatus.ACCEPTED);
 		}
-		return "";
+		bodyObject.put("status", "None");
+		return new ResponseEntity<String>(bodyObject.toString(), headers, HttpStatus.ACCEPTED);
 	}
 	
 	@PostMapping("/api/{projectId}/request")
