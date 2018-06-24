@@ -139,16 +139,28 @@ public class RequestServices {
 		return requestRepository.save(request);	
 	}
 
-	@PutMapping("/api/request/accepted")
-	public Request updateRequestToAccepted(@RequestBody Request request) {
-		request.setReqStatus(Request.RequestStatus.accepted);
-		return requestRepository.save(request);	
+	@PutMapping("/api/request/accepted/{requestId}")
+	public Request updateRequestToAccepted(@PathVariable("requestId") int requestId) {
+		Optional<Request> optionalRequest = requestRepository.findById(requestId);
+		if (optionalRequest.isPresent())
+		{
+			Request request = optionalRequest.get();
+			request.setReqStatus(Request.RequestStatus.accepted);
+			return requestRepository.save(request);
+		}
+		return null;
 	}
 	
-	@PutMapping("/api/request/rejected")
-	public Request updateRequestToRejected(@RequestBody Request request) {
-		request.setReqStatus(Request.RequestStatus.rejected);
-		return requestRepository.save(request);	
+	@PutMapping("/api/request/accepted/{requestId}")
+	public Request updateRequestToRejected(@PathVariable("requestId") int requestId) {
+		Optional<Request> optionalRequest = requestRepository.findById(requestId);
+		if (optionalRequest.isPresent())
+		{
+			Request request = optionalRequest.get();
+			request.setReqStatus(Request.RequestStatus.rejected);
+			return requestRepository.save(request);
+		}
+		return null;
 	}
 
 	@GetMapping("/api/{projectId}/requests/contributors/accepted")

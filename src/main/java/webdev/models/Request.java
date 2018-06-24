@@ -26,10 +26,8 @@ public class Request {
 	private String userType;
 	@Enumerated
 	private RequestStatus reqStatus;
-	@JsonIgnore
 	@ManyToOne
 	private User user;
-	@JsonIgnore
 	@ManyToOne
 	private Project project;
 	
