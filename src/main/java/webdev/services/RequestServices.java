@@ -97,7 +97,7 @@ public class RequestServices {
 	public ResponseEntity<String> getRequestStatus(@PathVariable("projectId") int projectId, HttpSession session) {
 		User currentUser = (User) session.getAttribute("currentUser");
 		Optional<Integer> optionalRequestId = requestRepository.findIdByUserIdAndProjectId(currentUser, projectRepository.findById(projectId).get(),
-				(String) session.getAttribute("currentUserType"));
+				(String) session.getAttribute("userType"));
 
 		JSONObject bodyObject = new JSONObject("{}");
 		HttpHeaders headers = new HttpHeaders();
@@ -105,7 +105,6 @@ public class RequestServices {
 			bodyObject.put("status", "None");
 			return new ResponseEntity<String>(bodyObject.toString(), headers, HttpStatus.ACCEPTED);
 		}
-
 		else {
 			Optional<Request> optionalRequest = requestRepository.findById(optionalRequestId.get());
 			Request request = optionalRequest.get();
