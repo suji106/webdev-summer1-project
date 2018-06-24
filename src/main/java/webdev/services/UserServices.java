@@ -96,7 +96,7 @@ public class UserServices {
 			User user = optionalUser.get();
 			session.setAttribute("currentUser", user);
 			System.out.println(session.getAttribute("userType"));
-			System.out.println(session.getAttribute("curentUser"));
+			System.out.println(session.getAttribute("currentUser"));
 			return user;
 		}
 		else {
