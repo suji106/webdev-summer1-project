@@ -69,7 +69,7 @@ public class UserServices {
 	}
 
 	@PostMapping("/api/user/signup")
-	public User signUpUser(@RequestBody User user, HttpSession session) throws JSONException {
+	public User signUpUser(@RequestBody User user, HttpSession session) {
 		Optional<User> optionalUser = userRepository.findById(user.getId());
 		if(!optionalUser.isPresent()) {
 			return userRepository.save(user);
@@ -145,11 +145,16 @@ public class UserServices {
 	}
 	
 	@GetMapping("/api/userType")
-	public String userType(HttpSession session) {
+	public JSONObject userType(HttpSession session) {
+		JSONObject bodyObject = new JSONObject("");
+		
 		if (session.getAttribute("userType") == null) {
-			return "None";
+			bodyObject.put("uerType", "None");
+			return bodyObject;
 		}
-		else
-			return (String) session.getAttribute("userType");
+		else {
+			bodyObject.put("uerType", (String) session.getAttribute("userType"));
+			return bodyObject;
+		}
 	}
 }
