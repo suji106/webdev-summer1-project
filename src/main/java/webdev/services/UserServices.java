@@ -95,6 +95,8 @@ public class UserServices {
 			Optional<User> optionalUser = userRepository.findById(optionalId.get());
 			User user = optionalUser.get();
 			session.setAttribute("currentUser", user);
+			System.out.println(session.getAttribute("userType"));
+			System.out.println(session.getAttribute("curentUser"));
 			return user;
 		}
 		else {
