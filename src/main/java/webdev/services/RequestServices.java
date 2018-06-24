@@ -151,7 +151,7 @@ public class RequestServices {
 		return null;
 	}
 	
-	@PutMapping("/api/request/accepted/{requestId}")
+	@PutMapping("/api/request/rejected/{requestId}")
 	public Request updateRequestToRejected(@PathVariable("requestId") int requestId) {
 		Optional<Request> optionalRequest = requestRepository.findById(requestId);
 		if (optionalRequest.isPresent())
