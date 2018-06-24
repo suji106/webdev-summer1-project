@@ -31,6 +31,15 @@ public class UserServices {
 		return userRepository.findAll(); 
 	}
 
+	@GetMapping("/api/user/{userId}")
+	public User getUser(@PathVariable("userId") int userId, HttpSession session) {
+		Optional<User> optionalUser = userRepository.findById(userId);
+		if(optionalUser.isPresent()) {
+			return optionalUser.get();
+		}
+		return null;
+	}
+	
 	@GetMapping("/api/user")
 	public User getUser(HttpSession session) {
 		User currentUser = (User) session.getAttribute("currentUser");
