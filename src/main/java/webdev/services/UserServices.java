@@ -1,5 +1,6 @@
 package webdev.services;
 
+import java.util.Date;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -124,6 +125,7 @@ public class UserServices {
 			User newUser = new User();
 			newUser.setEmail(email);
 			newUser.setName(name);
+			newUser.setCreated(new Date());
 			userRepository.save(newUser);
 			session.setAttribute("currentUser", newUser);
 			return newUser;

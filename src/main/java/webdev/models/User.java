@@ -1,5 +1,6 @@
 package webdev.models;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
@@ -18,7 +19,9 @@ public class User {
 	private String githubId;
 	private String imageUrl;
 	private String socialType;
-	
+	private Date created;
+	private String linkedinUrl;
+	private String githubUrl;
 	@JsonIgnore
 	@OneToMany(mappedBy="user")
 	private List<Comment> comments;
@@ -87,6 +90,29 @@ public class User {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+
+	public String getLinkedinUrl() {
+		return linkedinUrl;
+	}
+
+	public void setLinkedinUrl(String linkedinUrl) {
+		this.linkedinUrl = linkedinUrl;
+	}
+
+	public String getGithubUrl() {
+		return githubUrl;
+	}
+
+	public void setGithubUrl(String githubUrl) {
+		this.githubUrl = githubUrl;
 	}
 	public String getPassword() {
 		return this.password;
