@@ -149,18 +149,9 @@ public class UserServices {
 	}
 	
 	@GetMapping("/api/user/logout")
-	public JSONObject logout(HttpSession session) {
-		JSONObject bodyObject = new JSONObject("{}");
-		if (session.getAttribute("userType") == null) {
-			bodyObject.put("userType", "None");
-			System.out.println(bodyObject.toString());
-			return bodyObject;
-		}
-		else {
-			bodyObject.put("userType", (String) session.getAttribute("userType"));
-			System.out.println(bodyObject.toString());
-			return bodyObject;
-		}
+	public void logout(HttpSession session) {
+		if (session.getId() != null)
+			session.invalidate();
 	}
 	
 	@GetMapping("/api/userType")
