@@ -97,6 +97,7 @@ public class UserServices {
 			session.setAttribute("currentUser", user);
 			System.out.println(session.getAttribute("userType"));
 			System.out.println(session.getAttribute("currentUser"));
+			System.out.println(session.getId());
 			User a = (User) (session.getAttribute("currentUser"));
 			System.out.println(a.getEmail());
 			return user;
