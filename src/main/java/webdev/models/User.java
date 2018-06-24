@@ -25,6 +25,9 @@ public class User {
 	@JsonIgnore
 	@OneToMany(mappedBy="user")
 	private List<Request> requests;
+	@JsonIgnore
+	@OneToMany(mappedBy="mentor")
+	private List<Meeting> meetings;
 	private String organization;
 	@OneToMany(mappedBy="owner")
 	@JsonIgnore
@@ -90,6 +93,13 @@ public class User {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public List<Meeting> getMeetings() {
+		return meetings;
+	}
+
+	public void setMeetings(List<Meeting> meetings) {
+		this.meetings = meetings;
 	}
 	public String getGithubId() {
 		return githubId;

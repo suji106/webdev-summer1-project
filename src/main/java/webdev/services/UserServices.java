@@ -82,7 +82,7 @@ public class UserServices {
 	public User socialLoginUser(@RequestBody String body, HttpSession session) throws JSONException {
 		JSONObject bodyObject = new JSONObject(body);
 		String userType = (String) bodyObject.get("userType");
-		session.setAttribute("currentUser", userType);
+		session.setAttribute("userType", userType);
 		String email = (String) bodyObject.get("email");
 		String name = (String) bodyObject.get("name");
 		Optional<Integer> optionalId = userRepository.findUserIdByEmail(email);

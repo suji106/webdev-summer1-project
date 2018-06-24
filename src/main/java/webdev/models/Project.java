@@ -26,6 +26,9 @@ public class Project {
 	private List<Comment> comments;
 	@OneToMany(mappedBy="project")
 	@JsonIgnore
+	private List<Meeting> meetings;
+	@OneToMany(mappedBy="project")
+	@JsonIgnore
 	private List<Request> requests;
 	public int getId() {
 		return id;
@@ -80,6 +83,12 @@ public class Project {
 	}
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
+	}
+	public List<Meeting> getMeetings() {
+		return meetings;
+	}
+	public void setMeetings(List<Meeting> meetings) {
+		this.meetings = meetings;
 	}
 	public List<Request> getRequests() {
 		return requests;
