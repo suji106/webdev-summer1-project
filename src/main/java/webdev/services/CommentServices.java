@@ -46,6 +46,7 @@ public class CommentServices {
 		if(optionalProject.isPresent()) {
 			Project project = optionalProject.get();
 			List<Comment> comments= project.getComments();
+			System.out.println(comments.size());
 			comments.sort((o1,o2) -> o1.getCreated().compareTo(o2.getCreated()));
 			return comments;
 		}

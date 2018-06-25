@@ -101,7 +101,7 @@ public class UserServices {
 			Optional<User> optionalUser = userRepository.findById(optionalId.get());
 			if (optionalUser.get().getPassword().equals(password)) {
 				User user = optionalUser.get();
-				if (user.getName() == "admin") {
+				if (user.getEmail() == "admin") {
 					session.setAttribute("userType", "Admin");
 				}
 				session.setAttribute("currentUser", user);
