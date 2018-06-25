@@ -91,7 +91,7 @@ public class UserServices {
 	}
 
 	@PostMapping("/api/user/normalLogin")
-	public User normalLoginUser(@RequestBody String body, HttpSession session, HttpServletResponse response) throws JSONException {
+	public User normalLoginUser(@RequestBody String body, HttpSession session) throws JSONException {
 		JSONObject bodyObject = new JSONObject(body);
 		String userType = (String) bodyObject.get("userType");
 		session.setAttribute("currentUser", userType);
@@ -103,11 +103,6 @@ public class UserServices {
 			if (optionalUser.get().getPassword().equals(password)) {
 				User user = optionalUser.get();
 				session.setAttribute("currentUser", user);
-				
-			    response.setHeader("Access-Control-Allow-Credentials", "true");
-			    response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-			   
-			    response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
 				return user;
 			}
 		}
