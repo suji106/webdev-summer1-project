@@ -3,7 +3,6 @@ package webdev.services;
 import java.util.Date;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
@@ -102,6 +101,9 @@ public class UserServices {
 			Optional<User> optionalUser = userRepository.findById(optionalId.get());
 			if (optionalUser.get().getPassword().equals(password)) {
 				User user = optionalUser.get();
+				if (user.getName() == "admin") {
+					session.setAttribute("userType", "Admin");
+				}
 				session.setAttribute("currentUser", user);
 				return user;
 			}

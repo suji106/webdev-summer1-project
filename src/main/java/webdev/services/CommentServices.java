@@ -1,5 +1,6 @@
 package webdev.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,21 +83,12 @@ public class CommentServices {
 		}
 	}
 	
-	@DeleteMapping("/api/{userId}/comments")
-	public void deleteAllCommentsWithUserId(@PathVariable("userId") int userId) {
-		Optional<User> optionalUser = userRepository.findById(userId);
-		User user = optionalUser.get();
-		List<Request> comments= user.getRequests();
-		for(Request comment: comments) {
-			deleteComment(comment.getId());
-		}
-	}
-	
-	@PutMapping("/api/{projectId}/{userId}/comment")
-	public Comment updateComment(@RequestBody Comment comment, @PathVariable("projectId") int projectId,
-			@PathVariable("userId") int userId) {
+	@PutMapping("/api/{projectId}/comment")
+	public Comment updateComment(@RequestBody Comment comment, HttpSession session,
+			@PathVariable("projectId") int projectId) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		Optional<Project> optionalProject = projectRepository.findById(projectId);
-		Optional<User> optionalUser = userRepository.findById(userId);
 		if(optionalProject.isPresent() && optionalUser.isPresent()) {
 			comment.setProject(optionalProject.get());
 			comment.setUser(optionalUser.get());
@@ -107,11 +99,14 @@ public class CommentServices {
 	
 	@PostMapping("/api/{projectId}/{userId}/comment")
 	public Comment addComment(@RequestBody Comment comment, @PathVariable("projectId") int projectId,
-			@PathVariable("userId") int userId) {
+			HttpSession session, @PathVariable("userId") int userId) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		Optional<Project> optionalProject = projectRepository.findById(projectId);
-		Optional<User> optionalUser = userRepository.findById(userId);
 		if(optionalProject.isPresent() && optionalUser.isPresent()) {
+			comment.setCreated(new Date());
 			comment.setProject(optionalProject.get());
+			comment.setUserType((String) session.getAttribute("userType"));
 			comment.setUser(optionalUser.get());
 			return commentRepository.save(comment);
 		}
