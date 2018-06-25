@@ -20,10 +20,8 @@ public class Meeting {
 	private String message;
 	private String location;
 	private Date time;
-	@JsonIgnore
 	@ManyToOne
 	private User mentor;
-	@JsonIgnore
 	@ManyToOne
 	private Project project;
 	public int getId() {
