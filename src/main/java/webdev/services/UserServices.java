@@ -138,6 +138,16 @@ public class UserServices {
 			return newUser;
 		}
 	}
+	
+	@PostMapping("/api/user/admin")
+	public User userCreationByAdmin(@RequestBody User user) throws JSONException {
+		
+		Optional<User> optionalUser = userRepository.findById(user.getId());
+		if (!optionalUser.isPresent()) {
+			return userRepository.save(user);
+		}
+		return null;
+	}
 
 	@PutMapping("/api/user/update")
 	public User updateUser(@RequestBody User currentUser, HttpSession session) throws JSONException {
