@@ -55,6 +55,14 @@ public class UserServices {
 		return null;
 	}
 	
+	@DeleteMapping("/api/user/{userId}")
+	public void deleteUserWithUserId(@PathVariable("userId") int userId) {
+		Optional<User> optionalUser = userRepository.findById(userId);
+		if(optionalUser.isPresent()) {
+			userRepository.deleteById(optionalUser.get().getId());
+		}
+	}
+	
 	@DeleteMapping("/api/user")
 	public void deleteUser(HttpSession session) {
 		User currentUser = (User) session.getAttribute("currentUser");
