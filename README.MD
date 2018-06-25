@@ -1,4 +1,4 @@
-Web Development CCS 5610 Summer 1, 2018 Project Work
+ Web Development CCS 5610 Summer 1, 2018 Project Work
 
 App deployed on heroku and can be found on: https://nucode.herokuapp.com/
 
