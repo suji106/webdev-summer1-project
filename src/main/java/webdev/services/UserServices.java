@@ -94,7 +94,7 @@ public class UserServices {
 	public User normalLoginUser(@RequestBody String body, HttpSession session) throws JSONException {
 		JSONObject bodyObject = new JSONObject(body);
 		String userType = (String) bodyObject.get("userType");
-		session.setAttribute("currentUser", userType);
+		session.setAttribute("userType", userType);
 		String email = (String) bodyObject.get("email");
 		String password = (String) bodyObject.get("password");
 		Optional<Integer> optionalId = userRepository.findUserIdByEmail(email);
