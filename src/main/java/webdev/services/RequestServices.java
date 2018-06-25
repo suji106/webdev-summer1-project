@@ -240,7 +240,6 @@ public class RequestServices {
 
 	@GetMapping("/api/requests/accepted")
 	public List<Project> getAcceptedProjectsForUser(HttpSession session){
-		System.out.println(session.getId());
 		User currentUser = (User) session.getAttribute("currentUser");
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		if(optionalUser.isPresent()) {
@@ -259,7 +258,6 @@ public class RequestServices {
 
 	@GetMapping("/api/requests/rejected")
 	public List<Project> getRejectedProjectsForUser(HttpSession session){
-		System.out.println(session.getId());
 		User currentUser = (User) session.getAttribute("currentUser");
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		if(optionalUser.isPresent()) {
@@ -278,7 +276,6 @@ public class RequestServices {
 
 	@GetMapping("/api/requests/pending")
 	public List<Project> getPendingProjectsForUser(HttpSession session){
-		System.out.println(session.getId());
 		User currentUser = (User) session.getAttribute("currentUser");
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		if(optionalUser.isPresent()) {
