@@ -84,6 +84,7 @@ public class UserServices {
 	public User signUpUser(@RequestBody User user, HttpSession session) {
 		Optional<User> optionalUser = userRepository.findById(user.getId());
 		if(!optionalUser.isPresent()) {
+			user.setCreated(new Date());
 			return userRepository.save(user);
 		}
 		return null;

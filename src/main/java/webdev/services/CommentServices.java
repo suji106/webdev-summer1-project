@@ -101,7 +101,7 @@ public class CommentServices {
 	
 	@PostMapping("/api/{projectId}/comment")
 	public Comment addComment(@RequestBody Comment comment, @PathVariable("projectId") int projectId,
-			HttpSession session) {
+			HttpSession session, @PathVariable("userId") int userId) {
 		User currentUser = (User) session.getAttribute("currentUser");
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		Optional<Project> optionalProject = projectRepository.findById(projectId);
