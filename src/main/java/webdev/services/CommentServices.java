@@ -43,6 +43,7 @@ public class CommentServices {
 	@GetMapping("/api/{projectId}/project/comments")
 	public Iterable<Comment> findAllCommentsForProjectId(@PathVariable("projectId") int projectId) {
 		Optional<Project> optionalProject = projectRepository.findById(projectId);
+		System.out.println(projectId);
 		if(optionalProject.isPresent()) {
 			Project project = optionalProject.get();
 			List<Comment> comments= project.getComments();
