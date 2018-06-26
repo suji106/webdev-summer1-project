@@ -112,6 +112,28 @@ public class UserServices {
 		return null;
 	}
 	
+	@GetMapping("/api/user/follows")
+	public List<User> follows(HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			return user.getUsersFollowing();
+		}
+		return null;
+	}
+	
+	@GetMapping("/api/user/followers")
+	public List<User> followers(HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			return user.getUsersFollowed();
+		}
+		return null;
+	}
+	
 	@GetMapping("/api/user/follows/{userId}")
 	public ResponseEntity<String> followsUser(@PathVariable("userId") int userId, HttpSession session) {
 		User currentUser = (User) session.getAttribute("currentUser");
