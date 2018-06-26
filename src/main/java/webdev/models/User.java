@@ -35,10 +35,10 @@ public class User {
 	@OneToMany(mappedBy="owner")
 	@JsonIgnore
 	private List<Project> projectsPosted;
-	
+	@JsonIgnore
 	@ManyToMany(mappedBy="usersFollowed")
 	private List<User> usersFollowing;
-	
+	@JsonIgnore
 	@ManyToMany
 	private List<User> usersFollowed;
 
