@@ -1,6 +1,6 @@
 package webdev.models;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.*;
@@ -35,11 +35,12 @@ public class User {
 	@OneToMany(mappedBy="owner")
 	@JsonIgnore
 	private List<Project> projectsPosted;
+	@OneToMany(mappedBy="user")
+	private List<User> usersFollowed;
 
 	public List<Project> getProjectsPosted() {
 		return projectsPosted;
 	}
-
 	public void setProjectsPosted(List<Project> projectsPosted) {
 		this.projectsPosted = projectsPosted;
 	}
@@ -133,4 +134,11 @@ public class User {
 	public void setGithubId(String githubId) {
 		this.githubId = githubId;
 	}
+	public List<User> getUsersFollowed() {
+		return usersFollowed;
+	}
+	public void setUsersFollowed(List<User> usersFollowed) {
+		this.usersFollowed = usersFollowed;
+	}
+
 }

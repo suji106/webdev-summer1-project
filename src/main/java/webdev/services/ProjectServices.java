@@ -51,9 +51,19 @@ public class ProjectServices {
 	}
 
 	@GetMapping("/api/projects/owner")
-	public List<Project> getProjectsByOwnerId(HttpSession session) {
+	public List<Project> getProjectsByCurrentOwnerId(HttpSession session) {
 		User currentUser = (User) session.getAttribute("currentUser");
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
+		if(optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			return user.getProjectsPosted();
+		}
+		return null;
+	}
+	
+	@GetMapping("/api/projects/owner/{userId}")
+	public List<Project> getProjectsByOwnerId(@PathVariable("userId") int userId, HttpSession session) {
+		Optional<User> optionalUser = userRepository.findById(userId);
 		if(optionalUser.isPresent()) {
 			User user = optionalUser.get();
 			return user.getProjectsPosted();

@@ -1,6 +1,8 @@
 package webdev.services;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.sql.Date;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
@@ -43,7 +45,7 @@ public class UserServices {
 		}
 		return null;
 	}
-	
+
 	@GetMapping("/api/user")
 	public User getUser(HttpSession session) {
 		User currentUser = (User) session.getAttribute("currentUser");
@@ -53,7 +55,7 @@ public class UserServices {
 		}
 		return null;
 	}
-	
+
 	@DeleteMapping("/api/user/{userId}")
 	public void deleteUserWithUserId(@PathVariable("userId") int userId) {
 		Optional<User> optionalUser = userRepository.findById(userId);
@@ -61,7 +63,7 @@ public class UserServices {
 			userRepository.deleteById(optionalUser.get().getId());
 		}
 	}
-	
+
 	@DeleteMapping("/api/user")
 	public void deleteUser(HttpSession session) {
 		User currentUser = (User) session.getAttribute("currentUser");
@@ -84,8 +86,69 @@ public class UserServices {
 	public User signUpUser(@RequestBody User user, HttpSession session) {
 		Optional<User> optionalUser = userRepository.findById(user.getId());
 		if(!optionalUser.isPresent()) {
-			user.setCreated(new Date());
+			user.setCreated(new Date(Calendar.getInstance().getTime().getTime()));
 			return userRepository.save(user);
+		}
+		return null;
+	}
+
+	@PostMapping("/api/user/follow/{userId}")
+	public User followUser(@PathVariable("userId") int userId, HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			ArrayList<User> usersFollowed = (ArrayList<User>) user.getUsersFollowed();
+			Optional<User> optionalUserToBeFollowed = userRepository.findById(userId);
+			if (optionalUserToBeFollowed.isPresent()) {
+				User userToBeFollowed = optionalUserToBeFollowed.get();
+				usersFollowed.add(userToBeFollowed);
+				user.setUsersFollowed(usersFollowed);
+				return userRepository.save(user);
+			}
+		}
+		return null;
+	}
+	
+	@PostMapping("/api/user/follows/{userId}")
+	public ResponseEntity<String> followsUser(@PathVariable("userId") int userId, HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
+		JSONObject bodyObject = new JSONObject("{}");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			ArrayList<User> usersFollowed = (ArrayList<User>) user.getUsersFollowed();
+			Optional<User> optionalUserToBeFollowed = userRepository.findById(userId);
+			if (optionalUserToBeFollowed.isPresent()) {
+				User userToBeFollowed = optionalUserToBeFollowed.get();				
+				for (User checkUser: usersFollowed) {
+					if (checkUser.getEmail().equals(userToBeFollowed.getEmail())) {
+						bodyObject.put("follows", "true");
+						return new ResponseEntity<String>(bodyObject.toString(), headers, HttpStatus.ACCEPTED); 
+					}
+				}
+			}
+		}
+		bodyObject.put("follows", "false");
+		return new ResponseEntity<String>(bodyObject.toString(), headers, HttpStatus.ACCEPTED);
+	}
+	
+	@PostMapping("/api/user/unfollow/{userId}")
+	public User unfollowUser(@PathVariable("userId") int userId, HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			ArrayList<User> usersFollowed = (ArrayList<User>) user.getUsersFollowed();
+			Optional<User> optionalUserToBeFollowed = userRepository.findById(userId);
+			if (optionalUserToBeFollowed.isPresent()) {
+				User userToBeFollowed = optionalUserToBeFollowed.get();
+				usersFollowed.remove(userToBeFollowed);
+				user.setUsersFollowed(usersFollowed);
+				return userRepository.save(user);
+			}
 		}
 		return null;
 	}
@@ -130,16 +193,16 @@ public class UserServices {
 			User newUser = new User();
 			newUser.setEmail(email);
 			newUser.setName(name);
-			newUser.setCreated(new Date());
+			newUser.setCreated(new Date(Calendar.getInstance().getTime().getTime()));
 			userRepository.save(newUser);
 			session.setAttribute("currentUser", newUser);
 			return newUser;
 		}
 	}
-	
+
 	@PostMapping("/api/user/admin")
 	public User userCreationByAdmin(@RequestBody User user) throws JSONException {
-		
+
 		Optional<User> optionalUser = userRepository.findById(user.getId());
 		if (!optionalUser.isPresent()) {
 			return userRepository.save(user);
@@ -155,7 +218,7 @@ public class UserServices {
 		}
 		return null;
 	}
-	
+
 	@PutMapping("/api/user/update/{userId}")
 	public User updateUser(@RequestBody User currentUser, @PathVariable("userId") int userId) {
 		Optional<User> optionalUser = userRepository.findById(userId);
@@ -164,13 +227,13 @@ public class UserServices {
 		}
 		return null;
 	}
-	
+
 	@GetMapping("/api/user/logout")
 	public void logout(HttpSession session) {
 		if (session.getId() != null)
 			session.invalidate();
 	}
-	
+
 	@GetMapping("/api/userType")
 	public ResponseEntity<String> userType(HttpSession session) {
 		JSONObject bodyObject = new JSONObject("{}");

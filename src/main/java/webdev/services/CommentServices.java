@@ -1,6 +1,7 @@
 package webdev.services;
 
-import java.util.Date;
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import webdev.models.Comment;
 import webdev.models.Project;
-import webdev.models.Request;
 import webdev.models.User;
 import webdev.repositories.CommentRepository;
 import webdev.repositories.ProjectRepository;
@@ -106,7 +106,7 @@ public class CommentServices {
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		Optional<Project> optionalProject = projectRepository.findById(projectId);
 		if(optionalProject.isPresent() && optionalUser.isPresent()) {
-			comment.setCreated(new Date());
+			comment.setCreated(new Date(Calendar.getInstance().getTime().getTime()));
 			comment.setProject(optionalProject.get());
 			comment.setUserType((String) session.getAttribute("userType"));
 			comment.setUser(optionalUser.get());

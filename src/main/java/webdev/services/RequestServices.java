@@ -1,7 +1,8 @@
 package webdev.services;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -121,7 +122,7 @@ public class RequestServices {
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		request.setProject(optionalProject.get());
 		request.setUser(optionalUser.get());
-		request.setCreated(new Date());
+		request.setCreated(new Date(Calendar.getInstance().getTime().getTime()));
 		request.setUserType((String) session.getAttribute("userType"));
 		request.setReqStatus(Request.RequestStatus.pending);
 		return requestRepository.save(request);	
@@ -234,6 +235,23 @@ public class RequestServices {
 				}
 			}
 			return newRequests;
+		}
+		return null;
+	}
+	
+	@GetMapping("/api/requests/accepted/{userId}")
+	public List<Project> getAcceptedProjectsForOtherUser(@PathVariable("userId") int userId, HttpSession session){
+		Optional<User> optionalUser = userRepository.findById(userId);
+		if(optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			List<Request> requests = user.getRequests();
+			List<Project> projects = new ArrayList<Project>();
+			for(Request request: requests) {
+				if(request.getReqStatus().equals(Request.RequestStatus.accepted)) {
+					projects.add(request.getProject());
+				}
+			}
+			return projects;
 		}
 		return null;
 	}
