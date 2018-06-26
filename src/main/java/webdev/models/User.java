@@ -23,16 +23,16 @@ public class User {
 	private String linkedinUrl;
 	private String githubUrl;
 	@JsonIgnore
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	private List<Comment> comments;
 	@JsonIgnore
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	private List<Request> requests;
 	@JsonIgnore
-	@OneToMany(mappedBy="mentor")
+	@OneToMany(mappedBy="mentor", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	private List<Meeting> meetings;
 	private String organization;
-	@OneToMany(mappedBy="owner")
+	@OneToMany(mappedBy="owner", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	@JsonIgnore
 	private List<Project> projectsPosted;
 	@JsonIgnore

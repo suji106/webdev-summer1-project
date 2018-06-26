@@ -119,7 +119,7 @@ public class UserServices {
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		if (optionalUser.isPresent()) {
 			User user = optionalUser.get();
-			return user.getUsersFollowing();
+			return user.getUsersFollowed();
 		}
 		return null;
 	}
@@ -130,7 +130,7 @@ public class UserServices {
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		if (optionalUser.isPresent()) {
 			User user = optionalUser.get();
-			return user.getUsersFollowed();
+			return user.getUsersFollowing();
 		}
 		return null;
 	}
