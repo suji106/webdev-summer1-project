@@ -3,7 +3,7 @@ package webdev.services;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
@@ -88,6 +88,7 @@ public class UserServices {
 		Optional<User> optionalUser = userRepository.findById(user.getId());
 		if(!optionalUser.isPresent()) {
 			user.setCreated(new Date(Calendar.getInstance().getTime().getTime()));
+			System.out.println(System.currentTimeMillis());
 			return userRepository.save(user);
 		}
 		return null;
