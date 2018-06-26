@@ -92,7 +92,7 @@ public class UserServices {
 		return null;
 	}
 
-	@PostMapping("/api/user/follow/{userId}")
+	@GetMapping("/api/user/follow/{userId}")
 	public User followUser(@PathVariable("userId") int userId, HttpSession session) {
 		User currentUser = (User) session.getAttribute("currentUser");
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
@@ -110,7 +110,7 @@ public class UserServices {
 		return null;
 	}
 	
-	@PostMapping("/api/user/follows/{userId}")
+	@GetMapping("/api/user/follows/{userId}")
 	public ResponseEntity<String> followsUser(@PathVariable("userId") int userId, HttpSession session) {
 		User currentUser = (User) session.getAttribute("currentUser");
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
@@ -135,7 +135,7 @@ public class UserServices {
 		return new ResponseEntity<String>(bodyObject.toString(), headers, HttpStatus.ACCEPTED);
 	}
 	
-	@PostMapping("/api/user/unfollow/{userId}")
+	@GetMapping("/api/user/unfollow/{userId}")
 	public User unfollowUser(@PathVariable("userId") int userId, HttpSession session) {
 		User currentUser = (User) session.getAttribute("currentUser");
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());

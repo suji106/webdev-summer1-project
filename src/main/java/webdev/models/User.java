@@ -35,7 +35,11 @@ public class User {
 	@OneToMany(mappedBy="owner")
 	@JsonIgnore
 	private List<Project> projectsPosted;
-	@OneToMany(mappedBy="user")
+	
+	@ManyToMany(mappedBy="usersFollowed")
+	private List<User> usersFollowing;
+	
+	@ManyToMany
 	private List<User> usersFollowed;
 
 	public List<Project> getProjectsPosted() {
@@ -134,11 +138,16 @@ public class User {
 	public void setGithubId(String githubId) {
 		this.githubId = githubId;
 	}
+	public List<User> getUsersFollowing() {
+		return usersFollowing;
+	}
+	public void setUsersFollowing(List<User> usersFollowing) {
+		this.usersFollowing = usersFollowing;
+	}
 	public List<User> getUsersFollowed() {
 		return usersFollowed;
 	}
 	public void setUsersFollowed(List<User> usersFollowed) {
 		this.usersFollowed = usersFollowed;
 	}
-
 }
