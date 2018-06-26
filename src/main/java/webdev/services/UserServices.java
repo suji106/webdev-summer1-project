@@ -2,6 +2,7 @@ package webdev.services;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.sql.Date;
 import java.util.Optional;
 
@@ -98,7 +99,8 @@ public class UserServices {
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		if (optionalUser.isPresent()) {
 			User user = optionalUser.get();
-			ArrayList<User> usersFollowed = (ArrayList<User>) user.getUsersFollowed();
+			List<User> usersFollowed = user.getUsersFollowed();
+			usersFollowed = new ArrayList<User>(usersFollowed);
 			Optional<User> optionalUserToBeFollowed = userRepository.findById(userId);
 			if (optionalUserToBeFollowed.isPresent()) {
 				User userToBeFollowed = optionalUserToBeFollowed.get();
@@ -119,7 +121,8 @@ public class UserServices {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		if (optionalUser.isPresent()) {
 			User user = optionalUser.get();
-			ArrayList<User> usersFollowed = (ArrayList<User>) user.getUsersFollowed();
+			List<User> usersFollowed = user.getUsersFollowed();
+			usersFollowed = new ArrayList<User>(usersFollowed);
 			Optional<User> optionalUserToBeFollowed = userRepository.findById(userId);
 			if (optionalUserToBeFollowed.isPresent()) {
 				User userToBeFollowed = optionalUserToBeFollowed.get();				
@@ -141,7 +144,8 @@ public class UserServices {
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		if (optionalUser.isPresent()) {
 			User user = optionalUser.get();
-			ArrayList<User> usersFollowed = (ArrayList<User>) user.getUsersFollowed();
+			List<User> usersFollowed = user.getUsersFollowed();
+			usersFollowed = new ArrayList<User>(usersFollowed);
 			Optional<User> optionalUserToBeFollowed = userRepository.findById(userId);
 			if (optionalUserToBeFollowed.isPresent()) {
 				User userToBeFollowed = optionalUserToBeFollowed.get();
