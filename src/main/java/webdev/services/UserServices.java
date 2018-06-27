@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -243,6 +242,19 @@ public class UserServices {
 		User user = (User) session.getAttribute("currentUser");
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		if(optionalUser.isPresent()) {
+			user.setName(currentUser.getName());
+			user.setLinkedinUrl(currentUser.getLinkedinUrl());
+			user.setGithubUrl(currentUser.getGithubUrl());
+			return userRepository.save(user);
+		}
+		return null;
+	}
+	
+	@PutMapping("/api/user/admin/update")
+	public User updateUserByAdmin(@RequestBody User currentUser, HttpSession session) throws JSONException {
+		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
+		if(optionalUser.isPresent()) {
+			User user = userRepository.findById(currentUser.getId()).get();
 			user.setName(currentUser.getName());
 			user.setLinkedinUrl(currentUser.getLinkedinUrl());
 			user.setGithubUrl(currentUser.getGithubUrl());
