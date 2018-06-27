@@ -229,9 +229,9 @@ public class UserServices {
 
 	@PostMapping("/api/user/admin")
 	public User userCreationByAdmin(@RequestBody User user) throws JSONException {
-
 		Optional<User> optionalUser = userRepository.findById(user.getId());
 		if (!optionalUser.isPresent()) {
+			user.setCreated(new Date());
 			return userRepository.save(user);
 		}
 		return null;

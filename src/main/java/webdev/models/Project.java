@@ -21,13 +21,13 @@ public class Project {
 	@ManyToOne
 	private User owner;
 	private String url;
-	@OneToMany(mappedBy="project")
+	@OneToMany(mappedBy="project", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	@JsonIgnore
 	private List<Comment> comments;
-	@OneToMany(mappedBy="project")
+	@OneToMany(mappedBy="project", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	@JsonIgnore
 	private List<Meeting> meetings;
-	@OneToMany(mappedBy="project")
+	@OneToMany(mappedBy="project", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	@JsonIgnore
 	private List<Request> requests;
 	public int getId() {
