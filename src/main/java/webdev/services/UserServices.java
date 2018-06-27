@@ -238,11 +238,15 @@ public class UserServices {
 		return null;
 	}
 
-	@PatchMapping("/api/user/update")
+	@PutMapping("/api/user/update")
 	public User updateUser(@RequestBody User currentUser, HttpSession session) throws JSONException {
+		User user = (User) session.getAttribute("currentUser");
 		Optional<User> optionalUser = userRepository.findById(currentUser.getId());
 		if(optionalUser.isPresent()) {
-			return userRepository.save(currentUser);
+			user.setName(currentUser.getName());
+			user.setLinkedinUrl(currentUser.getLinkedinUrl());
+			user.setGithubUrl(currentUser.getGithubUrl());
+			return userRepository.save(user);
 		}
 		return null;
 	}
