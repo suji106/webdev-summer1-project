@@ -301,7 +301,8 @@ public class RequestServices {
 			List<Request> requests = user.getRequests();
 			List<Project> projects = new ArrayList<Project>();
 			for(Request request: requests) {
-				if(request.getReqStatus().equals(Request.RequestStatus.pending)) {
+				if(request.getReqStatus().equals(Request.RequestStatus.pending)
+						&& (request.getUserType().equals((String) session.getAttribute("userType")))) {
 					projects.add(request.getProject());
 				}
 			}
