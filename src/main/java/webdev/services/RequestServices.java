@@ -265,7 +265,8 @@ public class RequestServices {
 			List<Request> requests = user.getRequests();
 			List<Project> projects = new ArrayList<Project>();
 			for(Request request: requests) {
-				if(request.getReqStatus().equals(Request.RequestStatus.accepted)) {
+				if(request.getReqStatus().equals(Request.RequestStatus.accepted)
+						&& (request.getUserType().equals((String) session.getAttribute("userType")))) {
 					projects.add(request.getProject());
 				}
 			}
@@ -283,7 +284,8 @@ public class RequestServices {
 			List<Request> requests = user.getRequests();
 			List<Project> projects = new ArrayList<Project>();
 			for(Request request: requests) {
-				if(request.getReqStatus().equals(Request.RequestStatus.rejected)) {
+				if(request.getReqStatus().equals(Request.RequestStatus.rejected)
+						&& (request.getUserType().equals((String) session.getAttribute("userType")))) {
 					projects.add(request.getProject());
 				}
 			}
