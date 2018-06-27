@@ -303,6 +303,8 @@ public class RequestServices {
 			for(Request request: requests) {
 				if(request.getReqStatus().equals(Request.RequestStatus.pending)
 						&& (request.getUserType().equals((String) session.getAttribute("userType")))) {
+					System.out.println(request.getUserType());
+					System.out.println((String) session.getAttribute("userType"));
 					projects.add(request.getProject());
 				}
 			}
